@@ -1,0 +1,19 @@
+{
+  "name": "my-dog-likes-cheese",
+  "version": "1.1.0",
+  "description": "A JSON Database library in NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FerretCode/my-dog-likes-cheese.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FerretCode/my-dog-likes-cheese/issues"
+  },
+  "homepage": "https://github.com/FerretCode/my-dog-likes-cheese#readme"
+}
