@@ -13,12 +13,15 @@ var JSONLogAllObjects = function(filepath) {
 }
 
 var JSONPushKey = function(filepath, keyname) {
-    var JSONContentReadyToParse = fs.readFileSync(filepath);
-    var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
-    JSONParsedContent[keyname] = [];
-    JSONParsedContent[keyname].push(keyname);
+    //var JSONContentReadyToParse = fs.readFileSync(filepath);
+    //var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+    fs.readFileSync(filepath, function (err, data) {
+        var json = JSON.parse(data)
+        json.push(keyname)
+
+         fs.writeFile(filepath, JSON.stringify(json))
+    })
     console.log("Key " + keyname + " has been added to " + filepath);
-    //nameToPush.pop();
 }
 
 module.exports = {
