@@ -15,9 +15,9 @@ var JSONLogAllObjects = function(filepath) {
 var JSONPushKey = function(filepath, keyname) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = fs.readFileSync(filepath);
-    var nameToPush = [];
-    nameToPush.push(keyname);
-    nameToPush.push(JSONParsedContent);
+    var nameToPush = [keyname];
+    console.log("Key " + keyname + " has been added to " + filepath);
+    nameToPush.pop();
 }
 
 module.exports = {
