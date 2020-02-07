@@ -39,9 +39,26 @@ var JSONPushValue = function(filepath, nestedKey, value) {
     });
 }
 
+var JSONCreateDB = function(filename) {
+    var fileContent = "{}";
+
+    fs.writeFileSync(filename + ".json", fileContent, (err) => {
+        if(err) throw err;
+
+        console.log("Database " + filename + " has been created." );
+    })
+}
+
+var JSONDeleteDB = function(filepath) {
+    console.log("File " + filepath + " has been deleted.");
+    fs.unlinkSync(filepath);
+}
+
 module.exports = {
     JSONLogAllKeys: JSONLogAllKeys,
     JSONLogAllValues: JSONLogAllValues,
     JSONPushKey: JSONPushKey,
-    JSONPushValue: JSONPushValue
+    JSONPushValue: JSONPushValue,
+    JSONCreateDB: JSONCreateDB,
+    JSONDeleteDB: JSONDeleteDB
 }
