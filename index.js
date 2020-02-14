@@ -12,20 +12,23 @@ var JSONLogAllValues = function(filepath) {
     console.log(Object.values(JSONParsedContent));
 }
 
-var JSONPushKey = function(filepath, keyname, key = null) {
+var JSONPushKey = function(filepath, keyname, nestedKey = null) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     JSONParsedContent[keyname] = {};
+    var messageToPrint = "Key " + keyname + " has been added to " + filepath;
 
-    if(key != null){
-        JSONParsedContent[keyname][key] = {};
+    if(nestedKey != null){
+        delete JSONParsedContent[keyname];
+        JSONParsedContent[nestedKey][keyname] = {};
+        messageToPrint = "Nested Key " + keyname + " has been added to " + nestedKey + " in file " + filepath;
     }
 
     fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
         if(err) console.error(err);
     });
 
-    console.log("Key " + keyname + " has been added to " + filepath);
+    console.log(messageToPrint);
 }
 
 var JSONPushValue = function(filepath, value) {
@@ -40,7 +43,7 @@ var JSONPushValue = function(filepath, value) {
 var JSONCreateDB = function(filename) {
     var fileContent = "{}";
 
-    fs.writeFileSync(filename + ".json", fileContent, (err) => {
+    fs.writeFileSync(filename, fileContent, (err) => {
         if(err) throw err;
 
         console.log("Database " + filename + " has been created." );
