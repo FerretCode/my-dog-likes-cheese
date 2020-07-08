@@ -1,6 +1,6 @@
 {
   "name": "my-dog-likes-cheese",
-  "version": "1.5.8",
+  "version": "1.6.1",
   "description": "A JSON Database library in NodeJS",
   "main": "index.js",
   "scripts": {
