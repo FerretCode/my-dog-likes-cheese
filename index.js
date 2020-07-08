@@ -31,11 +31,11 @@ var JSONPushKey = function(filepath, keyname, nestedKey = null) {
     console.log(messageToPrint);
 }
 
-var JSONPushValue = function(filepath, key, value) {
+var JSONPushValue = function(filepath, key, value, secondValue) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     if(JSONParsedContent[key]) {
-        JSONParsedContent[key][value] = "";
+        JSONParsedContent[key][value] = secondValue;
     }
 
      fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
