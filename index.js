@@ -31,14 +31,18 @@ var JSONPushKey = function(filepath, keyname, nestedKey = null) {
     console.log(messageToPrint);
 }
 
-var JSONPushValue = function(filepath, value) {
+var JSONPushValue = function(filepath, key, value) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+    if(JSONParsedContent[key]) {
+        JSONParsedContent[key][value] = "";
+    }
 
      fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
         if(err) console.error(err);
     });
 }
+
 
 var JSONCreateDB = function(filename) {
     var fileContent = "{}";
