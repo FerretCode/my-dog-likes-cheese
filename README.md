@@ -1,8 +1,8 @@
 # my-dog-likes-cheese
 
-this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using `async-lock`
+this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using `await-lock`
 
-simply install with: `npm install -g my-dog-likes-cheese`
+simply install with: `npm install my-dog-likes-cheese`
 
 # creation and deletion of files
 ```javascript
