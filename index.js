@@ -43,7 +43,6 @@ const JSONPushValue = function(filepath, key, value, secondValue) {
     });
 }
 
-
 const JSONCreateDB = function(filename) {
     var fileContent = "{}";
 
@@ -59,12 +58,26 @@ const JSONDeleteDB = function(filepath) {
     fs.unlinkSync(filepath);
 }
 
-const JSONDeleteValue = (filepath, key, nestedKey = null) => {
-    const raw_json = fs.readFileSync(filepath);
-    let parsed_json = JSON.parse(raw_json);
-    delete parsed_json[key][nestedKey];
+const JSONDeleteValue = (filepath, key, value) => {
+    try {
+        const raw_json = fs.readFileSync(filepath);
+        let parsed_json = JSON.parse(raw_json);
+        delete parsed_json[key][nestedKey];
+        fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
+    } catch (err) {
+        throw err;
+    }
+}
 
-    fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
+const JSONDeleteKey = (filepath, key) => {
+    try {
+        const raw_json = fs.readFileSync(filepath);
+        let parsed_json = JSON.parse(raw_json);
+        delete parsed_json[key];
+        fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
+    } catch (err) { 
+        throw err
+    };
 }
 
 
@@ -75,5 +88,6 @@ module.exports = {
     JSONPushValue: JSONPushValue,
     JSONCreateDB: JSONCreateDB,
     JSONDeleteDB: JSONDeleteDB,
-    JSONDeleteValue: JSONDeleteValue
+    JSONDeleteValue: JSONDeleteValue,
+    JSONDeleteKey: JSONDeleteKey,
 }
