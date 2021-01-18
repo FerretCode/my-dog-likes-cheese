@@ -1,18 +1,18 @@
-var fs = require('fs');
+const fs = require('fs');
 
-var JSONLogAllKeys = function(filepath) {
+const JSONLogAllKeys = function(filepath) {
     var JSONContentReadyToParse = fs.readFileSync(filepath)
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     console.log(Object.keys(JSONParsedContent));
 }
 
-var JSONLogAllValues = function(filepath) {
+const JSONLogAllValues = function(filepath) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     console.log(Object.values(JSONParsedContent));
 }
 
-var JSONPushKey = function(filepath, keyname, nestedKey = null) {
+const JSONPushKey = function(filepath, keyname, nestedKey = null) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     JSONParsedContent[keyname] = {};
@@ -31,7 +31,7 @@ var JSONPushKey = function(filepath, keyname, nestedKey = null) {
     console.log(messageToPrint);
 }
 
-var JSONPushValue = function(filepath, key, value, secondValue) {
+const JSONPushValue = function(filepath, key, value, secondValue) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     if(JSONParsedContent[key]) {
@@ -44,7 +44,7 @@ var JSONPushValue = function(filepath, key, value, secondValue) {
 }
 
 
-var JSONCreateDB = function(filename) {
+const JSONCreateDB = function(filename) {
     var fileContent = "{}";
 
     fs.writeFileSync(filename, fileContent, (err) => {
@@ -54,10 +54,19 @@ var JSONCreateDB = function(filename) {
     })
 }
 
-var JSONDeleteDB = function(filepath) {
+const JSONDeleteDB = function(filepath) {
     console.log("File " + filepath + " has been deleted.");
     fs.unlinkSync(filepath);
 }
+
+const JSONDeleteValue = (filepath, key, nestedKey = null) => {
+    const raw_json = fs.readFileSync(filepath);
+    let parsed_json = JSON.parse(raw_json);
+    delete parsed_json[key][nestedKey];
+
+    fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
+}
+
 
 module.exports = {
     JSONLogAllKeys: JSONLogAllKeys,
@@ -65,5 +74,6 @@ module.exports = {
     JSONPushKey: JSONPushKey,
     JSONPushValue: JSONPushValue,
     JSONCreateDB: JSONCreateDB,
-    JSONDeleteDB: JSONDeleteDB
+    JSONDeleteDB: JSONDeleteDB,
+    JSONDeleteValue: JSONDeleteValue
 }
