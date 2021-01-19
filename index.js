@@ -15,18 +15,33 @@ const JSONLogAllValues = function(filepath) {
 const JSONPushKey = function(filepath, keyname, nestedKey = null) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
-    JSONParsedContent[keyname] = {};
-    var messageToPrint = "Key " + keyname + " has been added to " + filepath;
 
-    if(nestedKey != null){
-        delete JSONParsedContent[keyname];
-        JSONParsedContent[nestedKey][keyname] = {};
-        messageToPrint = "Nested Key " + keyname + " has been added to " + nestedKey + " in file " + filepath;
+    if(nestedKey != null && typeof nestedKey === 'string') {
+        var stringToPath = (path) => {
+            var output = [];
+
+            path.split('.').forEach((item, index) => {
+                item.split(/\[([^}]+)\]/g).forEach((key) => {
+                    if(key.length > 0) {
+                        output.push(key);
+                    }
+                });
+
+                return output;
+            })
+        }
+
+        nestedKey = stringToPath(nestedKey);
+    } else if(nestedKey !== null && typeof nestedKey !== 'string') {
+        console.error('TYPEERROR: nestedKey is not an array');
+    } else if(nestedKey === null) {
+        JSONParsedContent[keyname] = {};
+        var messageToPrint = "Key " + keyname + " has been added to " + filepath;
+
+        fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+            if(err) console.error(err);
+        });
     }
-
-    fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
-        if(err) console.error(err);
-    });
 
     console.log(messageToPrint);
 }
