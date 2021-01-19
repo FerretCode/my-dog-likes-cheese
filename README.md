@@ -43,4 +43,4 @@ dog.JSONDeleteKey('foo.json', 'key');
 
 ```
 # limitations
-cannot delete keys or values
+cannot nest more than one key deep
