@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { set, get } = require('@irrelon/path');
 
 const JSONLogAllKeys = function(filepath) {
     var JSONContentReadyToParse = fs.readFileSync(filepath)
@@ -17,23 +18,15 @@ const JSONPushKey = function(filepath, keyname, nestedKey = null) {
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
     if(nestedKey != null && typeof nestedKey === 'string') {
-        var stringToPath = (path) => {
-            var output = [];
+        set(JSONParsedContent, nestedKey + '.' + keyname, '{}');
 
-            path.split('.').forEach((item, index) => {
-                item.split(/\[([^}]+)\]/g).forEach((key) => {
-                    if(key.length > 0) {
-                        output.push(key);
-                    }
-                });
+        fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+            if(err) console.error(err);
+        });
 
-                return output;
-            })
-        }
-
-        nestedKey = stringToPath(nestedKey);
+        messageToPrint = 'Key ' + keyname + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
     } else if(nestedKey !== null && typeof nestedKey !== 'string') {
-        console.error('TYPEERROR: nestedKey is not an array');
+        messageToPrint = 'ERROR: nestedKey is not an array';
     } else if(nestedKey === null) {
         JSONParsedContent[keyname] = {};
         var messageToPrint = "Key " + keyname + " has been added to " + filepath;
@@ -46,14 +39,16 @@ const JSONPushKey = function(filepath, keyname, nestedKey = null) {
     console.log(messageToPrint);
 }
 
-const JSONPushValue = function(filepath, key, value, secondValue) {
+const JSONPushValue = function(filepath, key, value, secondValue, nestedKey) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
-    if(JSONParsedContent[key]) {
+    if(JSONParsedContent[key] && nestedKey === null) {
         JSONParsedContent[key][value] = secondValue;
+    } else if(nestedKey !== null && !JSONParsedContent[key]) {
+        set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
     }
 
-     fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+    fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
         if(err) console.error(err);
     });
 }
