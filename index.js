@@ -61,8 +61,12 @@ const JSONPushValue = async function(filepath, key, value, secondValue, nestedKe
         var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
         if(JSONParsedContent[key] && nestedKey === null) {
             JSONParsedContent[key][value] = secondValue;
+
+            messageToPrint = 'Value ' + value + " has been added to " + key;
         } else if(nestedKey !== null && !JSONParsedContent[key]) {
             set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
+
+            messageToPrint = 'Value ' + value + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
         }
     
         fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
