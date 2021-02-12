@@ -1,6 +1,6 @@
 # my-dog-likes-cheese
 
-this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using `await-lock`
+this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using `await-lock` and JSON querying/path setting using `@irrelon/path`
 
 simply install with: `npm install my-dog-likes-cheese`
 
@@ -28,9 +28,9 @@ dog.JSONPushKey('foo.json', 'key name');
 //add value directly into json
 dog.JSONPushValue('foo.json', 'key name', 'value name', 'value');
 //add key into an existing key
-dog.JSONPushKey('foo.json', 'key name', 'key to nest in');
+dog.JSONPushKey('foo.json', 'key name', 'key.path.to.nest.in');
 //add value into an existing key
-dog.JSONPushKey('foo.json', 'key name', 'value name', 'value', 'key to nest in');
+dog.JSONPushKey('foo.json', 'key name', 'value name', 'value', 'key.path.to.nest.in');
 ```
 # Deleting values and keys
 ```javascript
@@ -43,4 +43,3 @@ dog.JSONDeleteKey('foo.json', 'key');
 
 ```
 # limitations
-cannot nest more than one key deep
