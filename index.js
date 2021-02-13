@@ -1,7 +1,5 @@
 const fs = require('fs');
-const { set, get } = require('@irrelon/path');
-
-var lock = new require('await-lock').AwaitLock;
+const { set } = require('@irrelon/path');
 
 const JSONLogAllKeys = function(filepath) {
     var JSONContentReadyToParse = fs.readFileSync(filepath)
@@ -16,69 +14,52 @@ const JSONLogAllValues = function(filepath) {
 }
 
 const JSONPushKey = async function(filepath, keyname, nestedKey = null) {
-    await lock.acquireAsync();
+    var JSONContentReadyToParse = fs.readFileSync(filepath);
+    var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
-    console.log("locked");
+    if(nestedKey != null && typeof nestedKey === 'string') {
+        set(JSONParsedContent, nestedKey + '.' + keyname, '{}');
 
-    try {
-        var JSONContentReadyToParse = fs.readFileSync(filepath);
-        var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+        fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+            if (err)
+                console.error(err);
+        });
 
-        if(nestedKey != null && typeof nestedKey === 'string') {
-            set(JSONParsedContent, nestedKey + '.' + keyname, '{}');
+        messageToPrint = 'Key ' + keyname + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
+    } else if(nestedKey !== null && typeof nestedKey !== 'string') {
+        messageToPrint = 'ERROR: nestedKey is not an array';
+    } else if(nestedKey === null) {
+        JSONParsedContent[keyname] = {};
+        var messageToPrint = "Key " + keyname + " has been added to " + filepath;
 
-            fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
-                if(err) console.error(err);
-            });
-
-            messageToPrint = 'Key ' + keyname + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
-        } else if(nestedKey !== null && typeof nestedKey !== 'string') {
-            messageToPrint = 'ERROR: nestedKey is not an array';
-        } else if(nestedKey === null) {
-            JSONParsedContent[keyname] = {};
-            var messageToPrint = "Key " + keyname + " has been added to " + filepath;
-
-            fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
-                if(err) console.error(err);
-            });
-        }
-
-        console.log(messageToPrint);
-    } finally {
-        lock.release();
-
-        console.log("unlocked");
-    }
-}
-
-const JSONPushValue = async function(filepath, key, value, secondValue, nestedKey) {
-    await lock.acquireAsync();
-
-    try {
-        let messageToPrint;
-
-        var JSONContentReadyToParse = fs.readFileSync(filepath);
-        var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
-        if(JSONParsedContent[key] && nestedKey === null) {
-            JSONParsedContent[key][value] = secondValue;
-
-            messageToPrint = 'Value ' + value + " has been added to " + key;
-        } else if(nestedKey !== null && !JSONParsedContent[key]) {
-            set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
-
-            messageToPrint = 'Value ' + value + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
-        }
-    
         fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
             if(err) console.error(err);
         });
-
-        console.log(messageToPrint)
-    } finally {
-        lock.release();
-
-        console.log("unlocked")
     }
+
+    console.log(messageToPrint);
+}
+
+const JSONPushValue = async function(filepath, key, value, secondValue, nestedKey) {
+    let messageToPrint;
+
+    var JSONContentReadyToParse = fs.readFileSync(filepath);
+    var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+    if(JSONParsedContent[key] && nestedKey === null) {
+        JSONParsedContent[key][value] = secondValue;
+
+        messageToPrint = 'Value ' + value + " has been added to " + key;
+    } else if(nestedKey !== null && !JSONParsedContent[key]) {
+        set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
+
+        messageToPrint = 'Value ' + value + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
+    }
+
+    fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+        if(err) console.error(err);
+    });
+
+    console.log(messageToPrint);
 }
 
 const JSONCreateDB = function(filename) {
