@@ -1,6 +1,6 @@
 # my-dog-likes-cheese
 
-this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using `await-lock` and JSON querying/path setting using `@irrelon/path`
+this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using read and writeFileSync and JSON querying/path setting using `@irrelon/path`
 
 simply install with: `npm install my-dog-likes-cheese`
 
