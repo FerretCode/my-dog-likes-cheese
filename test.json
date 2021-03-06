@@ -2,7 +2,8 @@
     "testKey1": {
         "testKey2": {
             "testKey3": {
-                "testKey4": "{}"
+                "testKey4": "{}",
+                "testValue": "testValue"
             }
         }
     }
