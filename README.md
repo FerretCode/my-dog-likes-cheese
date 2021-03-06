@@ -2,7 +2,7 @@
 
 this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using read and writeFileSync and JSON querying/path setting using `@irrelon/path`
 
-simply install with: `npm install my-dog-likes-cheese`
+[![NPM](https://nodei.co/npm/my-dog-likes-cheese.png)](https://nodei.co/npm/my-dog-likes-cheese/)
 
 # 📜 creation and deletion of files
 ```javascript
