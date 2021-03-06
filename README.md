@@ -4,7 +4,7 @@ this is a NPM library that allows the creation, manipulation, and logging of JSO
 
 simply install with: `npm install my-dog-likes-cheese`
 
-# creation and deletion of files
+# 📜 creation and deletion of files
 ```javascript
 var dog = require('my-dog-likes-cheese');
 
@@ -12,14 +12,14 @@ dog.JSONCreateDB('foo.json');
 dog.JSONDeleteDB('foo.json');
 ```
 
-# logging of values and keys
+# 📜 logging of values and keys
 ```javascript
 var dog = require('my-dog-likes-cheese');
 
 dog.JSONLogAllKeys('foo.json');
 dog.JSONLogAllValues('foo.json');
 ```
-# adding values and keys
+# 📜 adding values and keys
 ```javascript
 var dog = require('my-dog-likes-cheese');
 
@@ -32,7 +32,7 @@ dog.JSONPushKey('foo.json', 'key name', 'key.path.to.nest.in');
 //add value into an existing key
 dog.JSONPushKey('foo.json', 'key name', 'value name', 'value', 'key.path.to.nest.in');
 ```
-# Deleting values and keys
+# 📜 Deleting values and keys
 ```javascript
 const dog = require('my-dog-likes-cheese');
 
@@ -42,4 +42,4 @@ dog.JSONDeleteValue('foo.json', 'key', 'value');
 dog.JSONDeleteKey('foo.json', 'key');
 
 ```
-# limitations
+# 🚫 limitations
