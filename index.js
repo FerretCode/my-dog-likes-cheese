@@ -46,9 +46,6 @@ const JSONPushValue = async function(filepath, key, value, secondValue, nestedKe
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
-    console.log(nestedKey);
-    console.log(typeof nestedKey)
-
     if(JSONParsedContent[key] && nestedKey === undefined) {
         JSONParsedContent[key][value] = secondValue;
 
