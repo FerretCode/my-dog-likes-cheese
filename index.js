@@ -40,16 +40,20 @@ const JSONPushKey = async function(filepath, keyname, nestedKey = null) {
     console.log(messageToPrint);
 }
 
-const JSONPushValue = async function(filepath, key, value, secondValue, nestedKey = null) {
+const JSONPushValue = async function(filepath, key, value, secondValue, nestedKey = undefined) {
     let messageToPrint;
 
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
-    if(JSONParsedContent[key] && nestedKey === null) {
+
+    console.log(nestedKey);
+    console.log(typeof nestedKey)
+
+    if(JSONParsedContent[key] && nestedKey === undefined) {
         JSONParsedContent[key][value] = secondValue;
 
         messageToPrint = 'Value ' + value + " has been added to " + key;
-    } else if(nestedKey !== null && typeof nestedKey !== 'string') {
+    } else if(nestedKey !== undefined && typeof nestedKey === 'string') {
         set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
 
         messageToPrint = 'Value ' + value + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
