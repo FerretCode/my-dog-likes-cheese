@@ -30,7 +30,7 @@ dog.JSONPushValue('foo.json', 'key name', 'value name', 'value');
 //add key into an existing key
 dog.JSONPushKey('foo.json', 'key name', 'key.path.to.nest.in');
 //add value into an existing key
-dog.JSONPushKey('foo.json', 'key name', 'value name', 'value', 'key.path.to.nest.in');
+dog.JSONPushValue('foo.json', 'key name', 'value name', 'value', 'key.path.to.nest.in');
 ```
 # 📜 Deleting values and keys
 ```javascript
