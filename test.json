@@ -1,1 +1,7 @@
-{}
+{
+    "testkey1": {
+        "testkey1": {
+            "testvalue2": "testvalue2"
+        }
+    }
+}
