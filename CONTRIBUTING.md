@@ -5,3 +5,5 @@ We are actively looking for contributors to help grow and expand the capabilitie
 
 To write new code inside of `index.js`, create a new constant function and make sure to export it. If you want to follow our
 naming convention, use UpperCamelCase and prefix the function name with JSON (we might expand further beyond JSON in the future)
+
+# That's basically it!
