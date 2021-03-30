@@ -17,7 +17,9 @@ const JSONPushKey = async function(filepath, keyname, nestedKey = null) {
     var JSONContentReadyToParse = fs.readFileSync(filepath);
     var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
-    if(nestedKey != null && typeof nestedKey === 'string') {
+    let messageToPrint = '';
+
+    if(nestedKey !== null && typeof nestedKey === 'string') {
         set(JSONParsedContent, nestedKey + '.' + keyname, '{}');
 
         fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
@@ -25,12 +27,12 @@ const JSONPushKey = async function(filepath, keyname, nestedKey = null) {
                 console.error(err);
         });
 
-        messageToPrint = 'Key ' + keyname + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
+        messageToPrint = `Key ${keyname} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
     } else if(nestedKey !== null && typeof nestedKey !== 'string') {
-        messageToPrint = 'ERROR: nestedKey is not an array';
+        messageToPrint = 'ERROR: nestedKey is not a string!';
     } else if(nestedKey === null) {
         JSONParsedContent[keyname] = {};
-        var messageToPrint = "Key " + keyname + " has been added to " + filepath;
+        messageToPrint = `Key ${keyname} has not been added to ${filepath}`;
 
         fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
             if(err) console.error(err);
@@ -49,11 +51,11 @@ const JSONPushValue = async function(filepath, key, value, secondValue, nestedKe
     if(JSONParsedContent[key] && nestedKey === undefined) {
         JSONParsedContent[key][value] = secondValue;
 
-        messageToPrint = 'Value ' + value + " has been added to " + key;
+        messageToPrint = `Value ${value} has been added to ${key}`;
     } else if(nestedKey !== undefined && typeof nestedKey === 'string') {
         set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
 
-        messageToPrint = 'Value ' + value + " has been added to " + nestedKey.split('.')[nestedKey.split('.').length - 1];
+        messageToPrint = `Value ${value} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
     }
 
     fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
@@ -64,41 +66,41 @@ const JSONPushValue = async function(filepath, key, value, secondValue, nestedKe
 }
 
 const JSONCreateDB = function(filename) {
-    var fileContent = "{}";
-
-    fs.writeFileSync(filename, fileContent, (err) => {
+    fs.writeFileSync(filename, "{}", (err) => {
         if(err) throw err;
 
-        console.log("Database " + filename + " has been created." );
+        console.log(`JSON file ${filename} has been created.`);
     })
 }
 
 const JSONDeleteDB = function(filepath) {
-    console.log("File " + filepath + " has been deleted.");
     fs.unlinkSync(filepath);
+
+    console.log(`JSON file ${filepath} has been deleted.`);
 }
 
+/*
 const JSONDeleteValue = (filepath, key, value) => {
     try {
         const raw_json = fs.readFileSync(filepath);
         let parsed_json = JSON.parse(raw_json);
-        delete parsed_json[key][nestedKey];
+        delete parsed_json[key][value];
         fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
     } catch (err) {
         throw err;
     }
 }
 
-const JSONDeleteKey = (filepath, key) => {
+const JSONDeleteKey = (filepath, key, nestedKey = null) => {
     try {
         const raw_json = fs.readFileSync(filepath);
         let parsed_json = JSON.parse(raw_json);
         delete parsed_json[key];
         fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
     } catch (err) { 
-        throw err
+        throw err;
     };
-}
+}*/
 
 
 module.exports = {
