@@ -109,7 +109,5 @@ module.exports = {
     JSONPushKey: JSONPushKey,
     JSONPushValue: JSONPushValue,
     JSONCreateDB: JSONCreateDB,
-    JSONDeleteDB: JSONDeleteDB,
-    JSONDeleteValue: JSONDeleteValue,
-    JSONDeleteKey: JSONDeleteKey,
+    JSONDeleteDB: JSONDeleteDB
 }
