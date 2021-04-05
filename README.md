@@ -32,6 +32,7 @@ dog.JSONPushKey('foo.json', 'key name', 'key.path.to.nest.in');
 //add value into an existing key
 dog.JSONPushValue('foo.json', 'key name', 'value name', 'value', 'key.path.to.nest.in');
 ```
+
 # 📜 Deleting values and keys
 ```javascript
 const dog = require('my-dog-likes-cheese');
@@ -42,4 +43,7 @@ dog.JSONDeleteValue('foo.json', 'key', 'value');
 dog.JSONDeleteKey('foo.json', 'key');
 
 ```
+* temporarily disabled
+
 # 🚫 limitations
+deleting keys and values cannot nest
