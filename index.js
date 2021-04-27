@@ -14,55 +14,67 @@ const JSONLogAllValues = function(filepath) {
 }
 
 const JSONPushKey = async function(filepath, keyname, nestedKey = null) {
-    var JSONContentReadyToParse = fs.readFileSync(filepath);
-    var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+    var promise = new Promise((resolve, reject) => {
+        var JSONContentReadyToParse = fs.readFileSync(filepath);
+        var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
-    let messageToPrint = '';
+        let messageToPrint = '';
 
-    if(nestedKey !== null && typeof nestedKey === 'string') {
-        set(JSONParsedContent, nestedKey + '.' + keyname, {});
+        if(nestedKey !== null && typeof nestedKey === 'string') {
+            set(JSONParsedContent, nestedKey + '.' + keyname, {});
 
-        fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
-            if (err)
-                console.error(err);
-        });
+            fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+                if (err)
+                    reject(err);
+            });
 
-        messageToPrint = `Key ${keyname} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
-    } else if(nestedKey !== null && typeof nestedKey !== 'string') {
-        messageToPrint = 'ERROR: nestedKey is not a string!';
-    } else if(nestedKey === null) {
-        JSONParsedContent[keyname] = {};
-        messageToPrint = `Key ${keyname} has not been added to ${filepath}`;
+            messageToPrint = `Key ${keyname} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
+        } else if(nestedKey !== null && typeof nestedKey !== 'string') {
+            reject("nestedKey is not a string!");
+        } else if(nestedKey === null) {
+            JSONParsedContent[keyname] = {};
+            messageToPrint = `Key ${keyname} has not been added to ${filepath}`;
 
-        fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
-            if(err) console.error(err);
-        });
-    }
+            fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+                if(err) reject(err);
+            });
+        }
 
-    console.log(messageToPrint);
+        console.log(messageToPrint);
+
+        resolve("Done!");
+    });
+
+    return promise;
 }
 
 const JSONPushValue = async function(filepath, key, value, secondValue, nestedKey = undefined) {
-    let messageToPrint;
+    var promise = new Promise((resolve, reject) => {
+        let messageToPrint;
 
-    var JSONContentReadyToParse = fs.readFileSync(filepath);
-    var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+        var JSONContentReadyToParse = fs.readFileSync(filepath);
+        var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
-    if(JSONParsedContent[key] && nestedKey === undefined) {
-        JSONParsedContent[key][value] = secondValue;
+        if(JSONParsedContent[key] && nestedKey === undefined) {
+            JSONParsedContent[key][value] = secondValue;
 
-        messageToPrint = `Value ${value} has been added to ${key}`;
-    } else if(nestedKey !== undefined && typeof nestedKey === 'string') {
-        set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
+            messageToPrint = `Value ${value} has been added to ${key}`;
+        } else if(nestedKey !== undefined && typeof nestedKey === 'string') {
+            set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
 
-        messageToPrint = `Value ${value} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
-    }
+            messageToPrint = `Value ${value} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
+        }
 
-    fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
-        if(err) console.error(err);
+        fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
+            if(err) reject(err);
+        });
+
+        console.log(messageToPrint);
+
+        resolve("Done!");
     });
 
-    console.log(messageToPrint);
+    return promise;
 }
 
 const JSONCreateDB = function(filename) {
