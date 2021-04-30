@@ -4,6 +4,8 @@ this is a NPM library that allows the creation, manipulation, and logging of JSO
 
 [![NPM](https://nodei.co/npm/my-dog-likes-cheese.png)](https://nodei.co/npm/my-dog-likes-cheese/)
 
+like the package? star it on github! https://github.com/ferretcode/my-dog-likes-cheese
+
 # 📜 creation and deletion of files
 ```javascript
 var dog = require('my-dog-likes-cheese');
