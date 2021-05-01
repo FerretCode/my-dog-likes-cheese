@@ -6,6 +6,8 @@ this is a NPM library that allows the creation, manipulation, and logging of JSO
 
 like the package? star it on github! https://github.com/ferretcode/my-dog-likes-cheese
 
+check out our website! https://my-dog-likes-cheese.glitch.me
+
 # 📜 creation and deletion of files
 ```javascript
 var dog = require('my-dog-likes-cheese');
