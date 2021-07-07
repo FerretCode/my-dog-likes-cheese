@@ -6,6 +6,8 @@ this is a NPM library that allows the creation, manipulation, and logging of JSO
 
 like the package? star it on github! https://github.com/ferretcode/my-dog-likes-cheese
 
+check out our website! https://my-dog-likes-cheese.glitch.me
+
 # 📜 creation and deletion of files
 ```javascript
 var dog = require('my-dog-likes-cheese');
@@ -36,16 +38,18 @@ dog.JSONPushValue('foo.json', 'key name', 'value name', 'value', 'key.path.to.ne
 ```
 
 # 📜 Deleting values and keys
-* temporarily disabled
 ```javascript
 const dog = require('my-dog-likes-cheese');
 
-// Works for deleting nested keys too
-dog.JSONDeleteValue('foo.json', 'key', 'value');
-
-dog.JSONDeleteKey('foo.json', 'key');
-
+//delete key directly accessible from json file
+dog.JSONDeleteValue('foo.json', 'key name').then(result => console.log(result));
+//delete value directly accessible from json file
+dog.JSONDeleteValue('foo.json', 'key name', 'value name').then(result => console.log(result));
+//delete nested key
+dog.JSONDeleteValue('foo.json', 'key name', null, 'path.to.key').then(result => console.log(result));
+//delete nested value
+dog.JSONDeleteValue('foo.json', 'key name', 'value name', 'path.to.value').then(result => console.log(result));
 ```
 
 # 🚫 limitations
-deleting keys and values cannot nest
+limited data returned from promises
