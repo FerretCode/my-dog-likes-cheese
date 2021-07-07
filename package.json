@@ -1,6 +1,6 @@
 {
   "name": "my-dog-likes-cheese",
-  "version": "1.9.8",
+  "version": "1.9.9",
   "description": "A Node.JS JSON library that makes JSON easy with minimal dependencies",
   "main": "index.js",
   "scripts": {
