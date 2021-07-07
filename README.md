@@ -2,11 +2,14 @@
 
 this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using read and writeFileSync + promises and JSON querying/path setting using `@irrelon/path`
 
+[![DISCORD](https://img.shields.io/badge/Discord-https%3A%2F%2Fdiscord.gg%2Fr84AeEGJEg-blueviolet?style=for-the-badge)](https://discord.gg/r84AeEGJEg)
 [![NPM](https://nodei.co/npm/my-dog-likes-cheese.png)](https://nodei.co/npm/my-dog-likes-cheese/)
 
 like the package? star it on github! https://github.com/ferretcode/my-dog-likes-cheese
 
 check out our website! https://my-dog-likes-cheese.glitch.me
+
+have a question or just want to talk? join the discord server! https://discord.gg/r84AeEGJEg
 
 # 📜 creation and deletion of files
 ```javascript
