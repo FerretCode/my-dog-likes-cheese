@@ -1,22 +1,22 @@
 const fs = require('fs');
-const { set } = require('@irrelon/path');
+const { set, unSet } = require('@irrelon/path');
 
 const JSONLogAllKeys = function(filepath) {
-    var JSONContentReadyToParse = fs.readFileSync(filepath)
-    var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+    let JSONContentReadyToParse = fs.readFileSync(filepath)
+    let JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     console.log(Object.keys(JSONParsedContent));
 }
 
 const JSONLogAllValues = function(filepath) {
-    var JSONContentReadyToParse = fs.readFileSync(filepath);
-    var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+    let JSONContentReadyToParse = fs.readFileSync(filepath);
+    let JSONParsedContent = JSON.parse(JSONContentReadyToParse);
     console.log(Object.values(JSONParsedContent));
 }
 
-const JSONPushKey = async function(filepath, keyname, nestedKey = null) {
-    var promise = new Promise((resolve, reject) => {
-        var JSONContentReadyToParse = fs.readFileSync(filepath);
-        var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+const JSONPushKey = async function(filepath, keyname, nestedKey = null, logging = true) {
+    let promise = new Promise((resolve, reject) => {
+        let JSONContentReadyToParse = fs.readFileSync(filepath);
+        let JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
         let messageToPrint = '';
 
@@ -31,35 +31,32 @@ const JSONPushKey = async function(filepath, keyname, nestedKey = null) {
             messageToPrint = `Key ${keyname} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
         } else if(nestedKey !== null && typeof nestedKey !== 'string') {
             reject("nestedKey is not a string!");
-        } else if(nestedKey === null) {
-            JSONParsedContent[keyname] = {};
-            messageToPrint = `Key ${keyname} has not been added to ${filepath}`;
-
-            fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
-                if(err) reject(err);
-            });
         }
 
-        console.log(messageToPrint);
+        if(logging)
+            console.log(messageToPrint);
 
-        resolve("Done!");
+        resolve({
+            status: "OK",
+            result: messageToPrint
+        });
     });
 
     return promise;
 }
 
-const JSONPushValue = async function(filepath, key, value, secondValue, nestedKey = undefined) {
-    var promise = new Promise((resolve, reject) => {
-        let messageToPrint;
+const JSONPushValue = async function(filepath, key, value, secondValue, nestedKey = null, logging = true) {
+    let promise = new Promise((resolve, reject) => {
+        let messageToPrint = '';
 
-        var JSONContentReadyToParse = fs.readFileSync(filepath);
-        var JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+        let JSONContentReadyToParse = fs.readFileSync(filepath);
+        let JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
-        if(JSONParsedContent[key] && nestedKey === undefined) {
+        if(JSONParsedContent[key] && nestedKey === null) {
             JSONParsedContent[key][value] = secondValue;
 
             messageToPrint = `Value ${value} has been added to ${key}`;
-        } else if(nestedKey !== undefined && typeof nestedKey === 'string') {
+        } else if(nestedKey !== null && typeof nestedKey === 'string') {
             set(JSONParsedContent, nestedKey + '.' + key + '.' + value, secondValue);
 
             messageToPrint = `Value ${value} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
@@ -69,9 +66,13 @@ const JSONPushValue = async function(filepath, key, value, secondValue, nestedKe
             if(err) reject(err);
         });
 
-        console.log(messageToPrint);
+        if(logging)
+            console.log(messageToPrint);
 
-        resolve("Done!");
+        resolve({
+            status: "OK",
+            result: messageToPrint
+        });
     });
 
     return promise;
@@ -91,35 +92,61 @@ const JSONDeleteDB = function(filepath) {
     console.log(`JSON file ${filepath} has been deleted.`);
 }
 
-/*
-const JSONDeleteValue = (filepath, key, value) => {
-    try {
-        const raw_json = fs.readFileSync(filepath);
-        let parsed_json = JSON.parse(raw_json);
-        delete parsed_json[key][value];
-        fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
-    } catch (err) {
-        throw err;
-    }
+const JSONDeleteValue = (filepath, key, value = null, nestedKey = null, logging = true) => {
+    let promise = new Promise((resolve, reject) => {
+        let messageToPrint = '';
+
+        let JSONContentReadyToParse = fs.readFileSync(filepath);
+        let JSONParsedContent = JSON.parse(JSONContentReadyToParse);
+
+        if(nestedKey === null && !JSONParsedContent[key])
+            reject("Key was not found in the JSON file!");
+
+        if(JSONParsedContent[key] && nestedKey === null) {
+            if(value === null) {
+                delete JSONParsedContent[key];
+
+                messageToPrint = `Key ${key} has been deleted.`;
+            }
+            else {
+                delete JSONParsedContent[key][value];
+
+                messageToPrint = `Value ${value} has been deleted from ${key}`;
+            }            
+        } else if(nestedKey !== null && typeof nestedKey === 'string' && value) {
+            unSet(JSONParsedContent, nestedKey + '.' + key + '.' + value);
+
+            messageToPrint = `Value ${value} has been removed from ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
+        } else if(nestedKey !== null && typeof nestedKey === 'string' && !value) {
+            unSet(JSONParsedContent, nestedKey + '.' + key);
+
+            console.log(JSONParsedContent);
+
+            messageToPrint = `Key ${key} has been removed from ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
+        }
+
+        fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), err => {
+            if(err) reject(err);
+        });
+
+        if(logging)
+            console.log(messageToPrint);
+
+        resolve({
+            status: "OK",
+            result: messageToPrint
+        });
+    });
+
+    return promise;
 }
 
-const JSONDeleteKey = (filepath, key, nestedKey = null) => {
-    try {
-        const raw_json = fs.readFileSync(filepath);
-        let parsed_json = JSON.parse(raw_json);
-        delete parsed_json[key];
-        fs.writeFileSync(filepath, JSON.stringify(parsed_json, null, 4));
-    } catch (err) { 
-        throw err;
-    };
-}*/
-
-
 module.exports = {
-    JSONLogAllKeys: JSONLogAllKeys,
-    JSONLogAllValues: JSONLogAllValues,
-    JSONPushKey: JSONPushKey,
-    JSONPushValue: JSONPushValue,
-    JSONCreateDB: JSONCreateDB,
-    JSONDeleteDB: JSONDeleteDB
+    JSONLogAllKeys,
+    JSONLogAllValues,
+    JSONPushKey,
+    JSONPushValue,
+    JSONCreateDB,
+    JSONDeleteDB,
+    JSONDeleteValue
 }
