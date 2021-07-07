@@ -60,7 +60,7 @@ const JSONPushValue = async function(filepath, key, value, secondValue, nestedKe
         if(nestedKey !== null && typeof nestedKey !== 'string')
             reject("nestedKey is not a string and needs to be!");
 
-        if(JSONParsedContent[key] && nestedKey === null) {
+        if(nestedKey === null) {
             key !== '' ? 
                 JSONParsedContent[key][value] = secondValue 
                 : JSONParsedContent[value] = secondValue; 
