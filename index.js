@@ -13,14 +13,21 @@ const JSONLogAllValues = function(filepath) {
     console.log(Object.values(JSONParsedContent));
 }
 
-const JSONPushKey = async function(filepath, keyname, nestedKey = null, logging = true) {
+const JSONPushKey = async function(filepath, keyName, nestedKey = null, logging = true) {
     let promise = new Promise((resolve, reject) => {
         let JSONContentReadyToParse = fs.readFileSync(filepath);
         let JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
         let messageToPrint = '';
 
-        if(nestedKey !== null && typeof nestedKey === 'string') {
+        if(nestedKey !== null && typeof nestedKey !== 'string') 
+            reject("nestedKey is not a string, and needs to be!")
+
+        if(nestedKey === null) {
+            JSONParsedContent[key] = {};
+
+            messageToPrint = `Key ${keyName} has been added.`;
+        }else if(nestedKey !== null && typeof nestedKey === 'string') {
             set(JSONParsedContent, nestedKey + '.' + keyname, {});
 
             fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
@@ -28,9 +35,7 @@ const JSONPushKey = async function(filepath, keyname, nestedKey = null, logging 
                     reject(err);
             });
 
-            messageToPrint = `Key ${keyname} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
-        } else if(nestedKey !== null && typeof nestedKey !== 'string') {
-            reject("nestedKey is not a string!");
+            messageToPrint = `Key ${keyName} has been added to ${nestedKey.split('.')[nestedKey.split('.').length - 1]}`;
         }
 
         if(logging)
@@ -52,8 +57,13 @@ const JSONPushValue = async function(filepath, key, value, secondValue, nestedKe
         let JSONContentReadyToParse = fs.readFileSync(filepath);
         let JSONParsedContent = JSON.parse(JSONContentReadyToParse);
 
+        if(nestedKey !== null && typeof nestedKey !== 'string')
+            reject("nestedKey is not a string and needs to be!");
+
         if(JSONParsedContent[key] && nestedKey === null) {
-            JSONParsedContent[key][value] = secondValue;
+            key !== '' ? 
+                JSONParsedContent[key][value] = secondValue 
+                : JSONParsedContent[value] = secondValue; 
 
             messageToPrint = `Value ${value} has been added to ${key}`;
         } else if(nestedKey !== null && typeof nestedKey === 'string') {
