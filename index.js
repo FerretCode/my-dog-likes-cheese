@@ -28,7 +28,7 @@ const JSONPushKey = async function(filepath, keyName, nestedKey = null, logging 
 
             messageToPrint = `Key ${keyName} has been added.`;
         }else if(nestedKey !== null && typeof nestedKey === 'string') {
-            set(JSONParsedContent, nestedKey + '.' + keyname, {});
+            set(JSONParsedContent, nestedKey + '.' + keyName, {});
 
             fs.writeFileSync(filepath, JSON.stringify(JSONParsedContent, null, 4), (err) => {
                 if (err)
