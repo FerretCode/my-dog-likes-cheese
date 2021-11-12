@@ -2,6 +2,8 @@
 
 this is a NPM library that allows the creation, manipulation, and logging of JSON files with race condition protection using read and writeFileSync + promises and JSON querying/path setting using `@irrelon/path`
 
+## rewrite coming soon
+
 [![DISCORD](https://img.shields.io/badge/Discord-https%3A%2F%2Fdiscord.gg%2Fr84AeEGJEg-blueviolet?style=for-the-badge)](https://discord.gg/r84AeEGJEg)
 
 [![NPM](https://nodei.co/npm/my-dog-likes-cheese.png)](https://nodei.co/npm/my-dog-likes-cheese/)
@@ -13,47 +15,73 @@ check out our website! https://my-dog-likes-cheese.glitch.me
 have a question or just want to talk? join the discord server! https://discord.gg/r84AeEGJEg
 
 # 📜 creation and deletion of files
-```javascript
-var dog = require('my-dog-likes-cheese');
 
-dog.JSONCreateDB('foo.json');
-dog.JSONDeleteDB('foo.json');
+```javascript
+var dog = require("my-dog-likes-cheese");
+
+dog.JSONCreateDB("foo.json");
+dog.JSONDeleteDB("foo.json");
 ```
 
 # 📜 logging of values and keys
-```javascript
-var dog = require('my-dog-likes-cheese');
 
-dog.JSONLogAllKeys('foo.json');
-dog.JSONLogAllValues('foo.json');
-```
-# 📜 adding values and keys
 ```javascript
-var dog = require('my-dog-likes-cheese');
+var dog = require("my-dog-likes-cheese");
+
+dog.JSONLogAllKeys("foo.json");
+dog.JSONLogAllValues("foo.json");
+```
+
+# 📜 adding values and keys
+
+```javascript
+var dog = require("my-dog-likes-cheese");
 
 //add key directly into json file
-dog.JSONPushKey('foo.json', 'key name').then(result => console.log(result));
+dog.JSONPushKey("foo.json", "key name").then((result) => console.log(result));
 //add value directly into json
-dog.JSONPushValue('foo.json', 'key name', 'value name', 'value').then(result => console.log(result));
+dog
+  .JSONPushValue("foo.json", "key name", "value name", "value")
+  .then((result) => console.log(result));
 //add key into an existing key
-dog.JSONPushKey('foo.json', 'key name', 'key.path.to.nest.in').then(result => console.log(result));
+dog
+  .JSONPushKey("foo.json", "key name", "key.path.to.nest.in")
+  .then((result) => console.log(result));
 //add value into an existing key
-dog.JSONPushValue('foo.json', 'key name', 'value name', 'value', 'key.path.to.nest.in').then(result => console.log(result));
+dog
+  .JSONPushValue(
+    "foo.json",
+    "key name",
+    "value name",
+    "value",
+    "key.path.to.nest.in"
+  )
+  .then((result) => console.log(result));
 ```
 
 # 📜 Deleting values and keys
+
 ```javascript
-const dog = require('my-dog-likes-cheese');
+const dog = require("my-dog-likes-cheese");
 
 //delete key directly accessible from json file
-dog.JSONDeleteValue('foo.json', 'key name').then(result => console.log(result));
+dog
+  .JSONDeleteValue("foo.json", "key name")
+  .then((result) => console.log(result));
 //delete value directly accessible from json file
-dog.JSONDeleteValue('foo.json', 'key name', 'value name').then(result => console.log(result));
+dog
+  .JSONDeleteValue("foo.json", "key name", "value name")
+  .then((result) => console.log(result));
 //delete nested key
-dog.JSONDeleteValue('foo.json', 'key name', null, 'path.to.key').then(result => console.log(result));
+dog
+  .JSONDeleteValue("foo.json", "key name", null, "path.to.key")
+  .then((result) => console.log(result));
 //delete nested value
-dog.JSONDeleteValue('foo.json', 'key name', 'value name', 'path.to.value').then(result => console.log(result));
+dog
+  .JSONDeleteValue("foo.json", "key name", "value name", "path.to.value")
+  .then((result) => console.log(result));
 ```
 
 # 🚫 limitations
+
 limited data returned from promises
