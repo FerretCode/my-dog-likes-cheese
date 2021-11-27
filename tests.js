@@ -1,21 +1,17 @@
-const dog = require(__dirname + '/index.js');
+const dog = require("./index");
 
 //TODO
 
-function deleteKeyAndValue() {
-
-}
+function deleteKeyAndValue() {}
 
 function addKeyAndValue() {
-
+  dog
+    .JSONPushKey(__dirname + "/nested.json", "bet", "test.test", false)
+    .then((res) => console.log(res));
 }
 
-function logAllKeysAndValues() {
+function logAllKeysAndValues() {}
 
-}
+function createAndDeleteJSONFile() {}
 
-function createAndDeleteJSONFile() {
-
-}
-
-deleteKeyAndValue();
+addKeyAndValue();
